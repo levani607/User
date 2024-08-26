@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: User-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    password: password
+    username: postgres
+
+jks:
+  alias: mykey
+  name: mykeystore.jks
+  key: 12345678
+  private-key: 12345678

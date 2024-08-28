@@ -3,6 +3,7 @@ package org.example.user.integration;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.user.model.domain.ApplicationUser;
 import org.example.user.model.enums.UserRole;
 import org.example.user.model.enums.UserStatus;
+import org.example.user.model.request.UserCreateRequest;
 import org.example.user.repository.ApplicationUserRepository;
 import org.example.user.security.WithAuthentication;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 
-import java.lang.constant.Constable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,65 @@ import java.util.stream.Stream;
 public class UserControllerIT extends BaseIT {
     @Autowired
     private ApplicationUserRepository userRepository;
+
+
+    //Create tests
+
+    @Test
+    @WithAuthentication(role = UserRole.ROLE_USER)
+    public void testCreate_shouldReturn403WhenRoleIsUser() throws Exception {
+        UserCreateRequest bla = createRequest("bla", "12345");
+        ResultActions response = mockMvc.perform(post("/api/users")
+                .header(HttpHeaders.HOST, "localhost")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(bla)) );
+
+        response.andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithAuthentication(role = UserRole.ROLE_ADMIN)
+    public void testCreate_shouldReturn201WhenRequestIsCorrect() throws Exception {
+        UserCreateRequest bla = createRequest("bla", "12345");
+        ResultActions response = mockMvc.perform(post("/api/users")
+                .header(HttpHeaders.HOST, "localhost")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(bla)));
+
+        response.andExpect(status().isCreated());
+    }
+
+    @Test
+    @WithAuthentication(role = UserRole.ROLE_ADMIN)
+    public void testCreate_shouldReturnBadRequestWhenValidationFails() throws Exception {
+        UserCreateRequest bla = createRequest("bla", "12");
+        ResultActions response = mockMvc.perform(post("/api/users")
+                .header(HttpHeaders.HOST, "localhost")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(bla)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.exceptionId", is("MethodArgumentNotValidException")))
+                .andExpect(jsonPath("$.message", containsString("password size must be between 4-32")));
+    }
+
+    @Test
+    @WithAuthentication(role = UserRole.ROLE_ADMIN)
+    public void testCreate_shouldReturnBadRequestWhenValidationFails2() throws Exception {
+        UserCreateRequest bla = createRequest(null, null);
+        ResultActions response = mockMvc.perform(post("/api/users")
+                .header(HttpHeaders.HOST, "localhost")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(bla)));
+
+        response.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.exceptionId", is("MethodArgumentNotValidException")))
+                .andExpect(jsonPath("$.message", containsString("password can not be null!")))
+                .andExpect(jsonPath("$.message", containsString("username can not be empty!")));
+    }
+
+    //Listing tests
+
 
     @WithAuthentication(role = UserRole.ROLE_ADMIN)
     @ParameterizedTest
@@ -113,5 +173,15 @@ public class UserControllerIT extends BaseIT {
                         "order", Collections.singletonList("ID")
                 )), 0, "")
         );
+    }
+
+    public UserCreateRequest createRequest(String username,String password){
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setUsername(username);
+        userCreateRequest.setPassword(password);
+        userCreateRequest.setRole(UserRole.ROLE_ADMIN);
+        userCreateRequest.setEmail("ble");
+        userCreateRequest.setFirstname("bla");
+        return userCreateRequest;
     }
 }

@@ -1,1 +1,1 @@
-drop table user_service.application_user;
+delete from user_service.application_user;

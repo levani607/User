@@ -57,7 +57,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Operation(
             security = @SecurityRequirement(name = "bearer-token"))
-
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();

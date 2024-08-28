@@ -2,17 +2,24 @@ spring:
   application:
     name: User-app
   datasource:
-    url: jdbc:postgresql://localhost:5432/user_db
-    password: 12345678
-    username: postgres
+    url: jdbc:postgresql://${DATASOURCE_URI}:${DATASOURCE_PORT}/${DATASOURCE_DB}
+    password: ${DATASOURCE_PASSWORD}
+    username: ${DATASOURCE_USERNAME}
 
 jks:
   alias: mykey
   name: mykeystore.jks
-  key: 12345678
-  private-key: 12345678
+  key: ${KEYSTORE_KEY}
+  private-key: ${PRIVATE_KEY}
 
 app:
   cfg:
     authorization:
       enabled: true
+    kafka:
+      enabled: true
+
+myapp:
+  bootstrap-servers: ${KAFKA_URI}
+  topics:
+    name: someTopic

@@ -2,6 +2,8 @@ app:
   cfg:
     authorization:
       enabled: false
+    kafka:
+      enabled: false
 
 spring:
   datasource:
@@ -18,3 +20,4 @@ jks:
   name: mykeystore.jks
   key: 12345678
   private-key: 12345678
+

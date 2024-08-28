@@ -11,14 +11,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @Testcontainers
 @SpringBootTest
 @AutoConfigureWebMvc
 @AutoConfigureMockMvc
 @Sql(scripts = {"classpath:cleanup.sql"}, executionPhase = AFTER_TEST_METHOD)
-@Sql(scripts = {"classpath:setup.sql"}, executionPhase = BEFORE_TEST_METHOD)
 public class BaseIT {
 
     @Autowired

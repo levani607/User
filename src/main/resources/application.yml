@@ -2,8 +2,8 @@ spring:
   application:
     name: User-app
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    password: password
+    url: jdbc:postgresql://localhost:5432/user_db
+    password: 12345678
     username: postgres
 
 jks:
@@ -11,3 +11,8 @@ jks:
   name: mykeystore.jks
   key: 12345678
   private-key: 12345678
+
+app:
+  cfg:
+    authorization:
+      enabled: true

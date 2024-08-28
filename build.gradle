@@ -34,8 +34,14 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 
 
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
+    testImplementation 'com.playtika.testcontainers:embedded-postgresql:2.3.2'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
+    testImplementation "com.github.tomakehurst:wiremock-jre8:2.35.0"
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'

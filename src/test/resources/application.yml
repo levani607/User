@@ -1,0 +1,20 @@
+app:
+  cfg:
+    authorization:
+      enabled: false
+
+spring:
+  datasource:
+    password: ${embedded.postgresql.password}
+    url: jdbc:postgresql://${embedded.postgresql.host}:${embedded.postgresql.port}/${embedded.postgresql.schema}
+    username: ${embedded.postgresql.user}
+  sql:
+    init:
+      mode: always
+  application:
+    name: User-app
+jks:
+  alias: mykey
+  name: mykeystore.jks
+  key: 12345678
+  private-key: 12345678

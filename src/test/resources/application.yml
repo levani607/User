@@ -4,7 +4,9 @@ app:
       enabled: false
     kafka:
       enabled: false
-
+eureka:
+  client:
+    enabled: false
 spring:
   datasource:
     password: ${embedded.postgresql.password}

@@ -26,3 +26,11 @@ myapp:
   bootstrap-servers: ${KAFKA_URI}
   topics:
     name: someTopic
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      example:
+        user: DEBUG
